@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yordam</title>
+    <style>
+        body {
+            background-color: blue;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .logo {
+            margin-top: 20px;
+        }
+        .buttons {
+            margin-top: 50px;
+        }
+        .buttons button {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            margin: 10px auto;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="https://via.placeholder.com/100" alt="Logo" width="100">
+        <h1>Yordamga Xush Kelibsiz</h1>
+    </div>
+    <div class="buttons" id="main-buttons">
+        <button onclick="helpRegion('america')">Amerikaga yordam</button>
+        <button onclick="helpRegion('palestine')">Falastinga yordam</button>
+        <button onclick="helpRegion('africa')">Afrikaga yordam</button>
+    </div>
+    <div class="buttons" id="usdt-buttons" style="display: none;">
+        <button onclick="sendUSDT()">USDT TRC20</button>
+        <button onclick="goBack()">Orqaga</button>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        const tg = window.Telegram.WebApp;
+        let userId = tg.initDataUnsafe.user.id;
+
+        function helpRegion(region) {
+            document.getElementById('main-buttons').style.display = 'none';
+            document.getElementById('usdt-buttons').style.display = 'block';
+        }
+
+        function sendUSDT() {
+            // Foydalanuvchi id sini yuboring
+            fetch('/send_address', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `user_id=${userId}`
+            }).then(response => {
+                alert('TRC20 manzil yuborildi!');
+                tg.close();
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function goBack() {
+            document.getElementById('usdt-buttons').style.display = 'none';
+            document.getElementById('main-buttons').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
